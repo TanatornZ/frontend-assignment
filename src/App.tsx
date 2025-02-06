@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type ITodoType = "Fruit" | "Vegetable";
 
@@ -70,26 +70,60 @@ function App() {
   const [todoList, setTodoList] = useState(todoData);
   const [fruitList, setFruitList] = useState<ITodoList>([]);
   const [vegatableList, setVegatableList] = useState<ITodoList>([]);
+  const [timeouts, setTimeouts] = useState<{[key: string] : number}>({}); // Store timeout IDs
+
 
   const handleOnClickFromTodoList = (todo: ITodoItem) => {
     const newTodoList = todoList.filter((item) => item !== todo);
     setTodoList(newTodoList);
+
+    var timeoutId : any
     if (todo.type === TodoType.Fruit) {
       setFruitList([...fruitList, todo]);
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
         setFruitList((list) => list.filter((i) => i !== todo));
+
+        setTimeouts((prevTimeouts) => {
+          const newTimeouts = { ...prevTimeouts };
+          delete newTimeouts[todo.name]
+          return newTimeouts;
+        });
       }, 5000);
     } else {
       setVegatableList([...vegatableList, todo]);
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
         setVegatableList((list) => list.filter((i) => i !== todo));
+
+        setTimeouts((prevTimeouts) => {
+          const newTimeouts = { ...prevTimeouts };
+          delete newTimeouts[todo.name]
+          return newTimeouts;
+        });
       }, 5000);
     }
+
+    // set time outs id
+    setTimeouts((prevTimeouts) => ({
+      ...prevTimeouts,
+      [todo.name]: timeoutId,
+    }));
   };
 
   const handleOnClickFromTypeList = (todo: ITodoItem) => {
+    const timeoutId = timeouts[todo.name];    // If a timeout exists, clear it
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+
+      // Remove the timeout ID from the state
+      setTimeouts((prevTimeouts) => {
+        const newTimeouts = { ...prevTimeouts };
+        delete newTimeouts[todo.name];
+        return newTimeouts;
+      });
+    }
+
     setTodoList([...todoList, todo]);
     if (todo.type === TodoType.Fruit) {
       setFruitList((list) => list.filter((item) => item !== todo));
