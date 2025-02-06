@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ITodoList , ITodoItem , TodoType} from "./Types/Todo";
-import { TodoItem } from "./Components/TodoItem";
-import { TypeList } from "./Components/TypeList";
-import { todoData } from "./data";
+import { ITodoList , ITodoItem , TodoType} from "../Types/Todo";
+import { TodoItem } from "../Components/TodoItem";
+import { TypeList } from "../Components/TypeList";
+import { todoData } from "../data";
 
-function App() {
+function TodoPage() {
   const [todoList, setTodoList] = useState(todoData);
   const [fruitList, setFruitList] = useState<ITodoList>([]);
   const [vegatableList, setVegatableList] = useState<ITodoList>([]);
@@ -15,9 +15,10 @@ function App() {
     const newTodoList = todoList.filter((item) => item !== todo);
     setTodoList(newTodoList);
 
-    var timeoutId : any
+    var timeoutId : number
     if (todo.type === TodoType.Fruit) {
       setFruitList([...fruitList, todo]);
+      
       timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
         setFruitList((list) => list.filter((i) => i !== todo));
@@ -71,7 +72,7 @@ function App() {
   };
 
   return (
-    <div className="bg-indigo-100 w-screen h-screen  min-w-xs">
+    <div className="bg-indigo-50 w-screen h-screen  min-w-xs">
       <div className="max-w-5xl mx-auto p-4 md:p-6 md:px-10">
         <h1 className="text-2xl font-bold  text-indigo-900 text-center">
           Todo list
@@ -105,4 +106,4 @@ function App() {
   );
 }
 
-export default App;
+export default TodoPage;
