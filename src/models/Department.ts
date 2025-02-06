@@ -1,4 +1,4 @@
-import { User } from "../Types/User";
+import { IUserSummary, User } from "../Types/User";
 
 export class DepartmentModel {
   users: User[];
@@ -52,7 +52,7 @@ export class DepartmentModel {
     return addressUser;
   }
 
-  getSamaryUser() {
+  getSummaryUser(): IUserSummary {
     const gender = this.getGender()
     const ageRange = this.getAgeRange()
     const hair = this.getHairColor()

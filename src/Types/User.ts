@@ -45,7 +45,7 @@ export interface User {
   lastName: string;
   maidenName: string;
   age: number;
-  gender: 'male' | 'female';
+  gender: "male" | "female";
   email: string;
   phone: string;
   username: string;
@@ -75,4 +75,18 @@ export type IUserResponse = {
   total: number;
   skip: number;
   limit: number;
+};
+
+export type IUserSummary = {
+  [x: string]: {
+    male: number;
+    female: number;
+    ageRange: string;
+    hair: {
+      [key: string]: number;
+    };
+    addressUser: {
+      [key: string]: string;
+    };
+  };
 };

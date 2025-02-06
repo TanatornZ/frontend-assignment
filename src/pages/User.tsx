@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { IUserResponse } from "../Types/User";
+import { IUserResponse, IUserSummary } from "../Types/User";
 import { UsersModel } from "../models/User";
 import { DepartmentModel } from "../models/Department";
 
 function UserPage() {
   const [userModel, setUserModel] = useState<UsersModel>(null!);
+  const [summaryUser, setSummaryUser] = useState<IUserSummary[]>(null!);
 
   useEffect(() => {
     fetch("https://dummyjson.com/users")
@@ -14,12 +15,26 @@ function UserPage() {
       });
   }, []);
 
-  if (userModel) {
-    let users = userModel.getUserByDepartment("Engineering");
-    console.log("dapartment ", userModel && userModel.getAllDepartment());
-    console.log("users :>> ", users);
+  useEffect(() => {
+    if (userModel) {
+      const allDepartment = userModel.getAllDepartment();
 
-    const Engineering = new DepartmentModel(users, "Engineering");
+      allDepartment.forEach((item) => {
+        let user = userModel.getUserByDepartment(item);
+        let eachDepartment = new DepartmentModel(user, item);
+
+        console.log("user summary", eachDepartment.getSummaryUser());
+
+        setSummaryUser((prev) => [
+          ...(prev || []),
+          eachDepartment.getSummaryUser(),
+        ]);
+      });
+    }
+  }, [userModel]);
+
+  if (userModel) {
+    // const Engineering = new DepartmentModel(users, "Engineering");
   }
 
   return (
@@ -32,32 +47,12 @@ function UserPage() {
           {!userModel ? (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 loader"></div>
           ) : (
-            <div className="p-4 bg-blue-100 rounded-xl">
-              <pre className="">
-                {JSON.stringify(
-                  {
-                    Engineering: {
-                      male: 2,
-                      female: 2,
-                      ageRange: "26-40",
-                      hair: {
-                        Brown: 1,
-                        White: 1,
-                        Red: 1,
-                        Gray: 1,
-                      },
-                      addressUser: {
-                        EmilyJohnson: "29112",
-                        AlexanderJones: "86684",
-                        NoahHernandez: "73696",
-                        MadisonCollins: "62091",
-                      },
-                    },
-                  },
-                  null,
-                  2
-                )}
-              </pre>
+            <div className="space-y-2 mt-4 max-w-xl mx-auto">
+              {summaryUser &&
+                summaryUser.length > 0 &&
+                summaryUser.map((user, index) => (
+                  <DepartmentList department={user} key={`json ${index}`} />
+                ))}
             </div>
           )}
         </div>
@@ -67,3 +62,11 @@ function UserPage() {
 }
 
 export default UserPage;
+
+const DepartmentList = (department: { department: IUserSummary }) => {
+  return (
+    <div className="p-4 bg-blue-100 rounded-xl">
+      <pre className="">{JSON.stringify(department.department, null, 2)}</pre>
+    </div>
+  );
+};
