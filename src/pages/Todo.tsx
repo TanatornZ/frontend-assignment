@@ -7,15 +7,15 @@ import { todoData } from "../data";
 function TodoPage() {
   const [todoList, setTodoList] = useState(todoData);
   const [fruitList, setFruitList] = useState<ITodoList>([]);
-  const [vegatableList, setVegatableList] = useState<ITodoList>([]);
-  const [timeouts, setTimeouts] = useState<{[key: string] : number}>({}); // Store timeout IDs
+  const [vegetableList, setVegetableList] = useState<ITodoList>([]);
+  const [timeouts, setTimeouts] = useState<{[key: string] : NodeJS.Timeout}>({}); // Store timeout IDs
 
 
   const handleOnClickFromTodoList = (todo: ITodoItem) => {
     const newTodoList = todoList.filter((item) => item !== todo);
     setTodoList(newTodoList);
 
-    var timeoutId : number
+    let timeoutId
     if (todo.type === TodoType.Fruit) {
       setFruitList([...fruitList, todo]);
       
@@ -30,10 +30,10 @@ function TodoPage() {
         });
       }, 5000);
     } else {
-      setVegatableList([...vegatableList, todo]);
+      setVegetableList([...vegetableList, todo]);
       timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
-        setVegatableList((list) => list.filter((i) => i !== todo));
+        setVegetableList((list) => list.filter((i) => i !== todo));
 
         setTimeouts((prevTimeouts) => {
           const newTimeouts = { ...prevTimeouts };
@@ -67,18 +67,18 @@ function TodoPage() {
     if (todo.type === TodoType.Fruit) {
       setFruitList((list) => list.filter((item) => item !== todo));
     } else {
-      setVegatableList((list) => list.filter((item) => item !== todo));
+      setVegetableList((list) => list.filter((item) => item !== todo));
     }
   };
 
   return (
-    <div className="bg-indigo-50 w-screen h-screen  min-w-xs">
+    <div className="bg-indigo-50 max-w-screen min-h-screen min-w-xs">
       <div className="max-w-5xl mx-auto p-4 md:p-6 md:px-10">
-        <h1 className="text-2xl font-bold  text-indigo-900 text-center">
+        <h1 className="text-2xl lg:text-4xl font-bold  text-blue-950 text-center">
           Todo list
         </h1>
         <div className="flex flex-col mt-4 md:mt-6 lg:flex-row-reverse gap-4">
-          <div className="flex w-full max-w-xl h-[350px] gap-2 lg:shrink-0 mx-auto">
+          <div className="flex w-full max-w-xl h-[350px] lg:h-[400px] gap-2 lg:gap-4 lg:shrink-0 mx-auto">
             <TypeList
               type={TodoType.Fruit}
               list={fruitList}
@@ -86,12 +86,12 @@ function TodoPage() {
             />
             <TypeList
               type={TodoType.Vegetable}
-              list={vegatableList}
+              list={vegetableList}
               onClickItem={handleOnClickFromTypeList}
             />
           </div>
 
-          <div className="flex gap-2 flex-wrap content-baseline mx-auto lg:basis-1/2 lg:shrink-0/">
+          <div className="flex gap-2 flex-wrap lg:gap-4 justify-center content-baseline mx-auto lg:basis-1/2">
             {todoList.map((todo, index) => (
               <TodoItem
                 key={`todo ${index}`}

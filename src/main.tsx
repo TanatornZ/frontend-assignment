@@ -13,6 +13,5 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/user" element={<UserPage />} />
       </Routes>
     </StrictMode>
-    ,
   </BrowserRouter>
 );

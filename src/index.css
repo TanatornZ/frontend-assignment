@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  max-height: 100dvh;
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 50px;

@@ -11,8 +11,8 @@ export const TypeList = ({
     onClickItem: (todo: ITodoItem) => void;
   }) => {
     return (
-      <div className="h-full basis-1/2 border border-gray-600 rounded-md divide-y divide-gray-600">
-        <h1 className="text-lg font-medium text-center py-2 select-none">{type}</h1>
+      <div className="h-full basis-1/2 border border-gray-600 rounded-sm shadow divide-y divide-gray-600">
+        <h1 className="text-lg lg:text-2xl font-medium text-center py-2 select-none text-blue-950">{type}</h1>
         <div className="p-2 flex flex-col gap-2 justify-center items-center">
           {list?.length > 0 &&
             list?.map((item, index) => (
