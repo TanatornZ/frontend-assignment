@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ITodoType = "Fruit" | "Vegetable";
 
@@ -73,24 +73,30 @@ function App() {
 
   const handleOnClickFromTodoList = (todo: ITodoItem) => {
     const newTodoList = todoList.filter((item) => item !== todo);
-
     setTodoList(newTodoList);
     if (todo.type === TodoType.Fruit) {
       setFruitList([...fruitList, todo]);
+      setTimeout(() => {
+        setTodoList((list) => [...list, todo]);
+        setFruitList((list) => list.filter((i) => i !== todo));
+      }, 5000);
     } else {
       setVegatableList([...vegatableList, todo]);
+      setTimeout(() => {
+        setTodoList((list) => [...list, todo]);
+        setVegatableList((list) => list.filter((i) => i !== todo));
+      }, 5000);
     }
   };
 
-  const handleOnClickFromTypeList = (todo:ITodoItem) => {
-
-    setTodoList([...todoList , todo])
+  const handleOnClickFromTypeList = (todo: ITodoItem) => {
+    setTodoList([...todoList, todo]);
     if (todo.type === TodoType.Fruit) {
-      setFruitList((list) => list.filter(item => item !== todo));
+      setFruitList((list) => list.filter((item) => item !== todo));
     } else {
-      setVegatableList((list) => list.filter(item => item !== todo));
+      setVegatableList((list) => list.filter((item) => item !== todo));
     }
-  }
+  };
 
   return (
     <div className="bg-indigo-100 w-screen h-screen  min-w-xs">
@@ -100,11 +106,19 @@ function App() {
         </h1>
         <div className="flex flex-col mt-4 md:mt-6 lg:flex-row-reverse gap-4">
           <div className="flex w-full max-w-xl h-[350px] gap-2 lg:shrink-0 mx-auto">
-            <TypeList type={TodoType.Fruit} list={fruitList} onClickItem={handleOnClickFromTypeList}/>
-            <TypeList type={TodoType.Vegetable} list={vegatableList}  onClickItem={handleOnClickFromTypeList}/>
+            <TypeList
+              type={TodoType.Fruit}
+              list={fruitList}
+              onClickItem={handleOnClickFromTypeList}
+            />
+            <TypeList
+              type={TodoType.Vegetable}
+              list={vegatableList}
+              onClickItem={handleOnClickFromTypeList}
+            />
           </div>
 
-          <div className="flex gap-2 flex-wrap content-baseline mx-auto ">
+          <div className="flex gap-2 flex-wrap content-baseline mx-auto lg:basis-1/2 lg:shrink-0/">
             {todoList.map((todo, index) => (
               <TodoItem
                 key={`todo ${index}`}
@@ -121,13 +135,20 @@ function App() {
 
 export default App;
 
-const TypeList = ({ type, list , onClickItem}: { type: TodoType; list: ITodoList , onClickItem: (todo:ITodoItem) => void }) => {
+const TypeList = ({
+  type,
+  list,
+  onClickItem,
+}: {
+  type: TodoType;
+  list: ITodoList;
+  onClickItem: (todo: ITodoItem) => void;
+}) => {
   return (
     <div className="h-full basis-1/2 border border-gray-600 rounded-md divide-y divide-gray-600">
-      <h1 className="text-lg font-medium text-center py-2">{type}</h1>
+      <h1 className="text-lg font-medium text-center py-2 select-none">{type}</h1>
       <div className="p-2 flex flex-col gap-2 justify-center items-center">
-        {
-          list?.length > 0 &&
+        {list?.length > 0 &&
           list?.map((item, index) => (
             <TodoItem
               todo={item}
@@ -149,12 +170,12 @@ const TodoItem = ({
 }) => {
   return (
     <div
-      className="p-2 border rounded-md px-4 text-sm w-fit h-fit"
+      className="p-2 border rounded-md px-4 text-sm w-fit h-fit cursor-pointer select-none"
       onClick={() => {
         onClick(todo);
       }}
     >
-      {todo.name}
+      <h1 className="select-none">{todo.name}</h1>
     </div>
   );
 };
