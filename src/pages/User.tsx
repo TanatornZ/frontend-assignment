@@ -21,6 +21,8 @@ function UserPage() {
 
       allDepartment.forEach((item) => {
         let user = userModel.getUserByDepartment(item);
+
+        console.log('user => ', user)
         let eachDepartment = new DepartmentModel(user, item);
 
         console.log("user summary", eachDepartment.getSummaryUser());
