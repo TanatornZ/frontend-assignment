@@ -40,6 +40,9 @@ export class DepartmentModel {
     let allAge = this.users.map((item) => item.age);
     const minAge = Math.min(...allAge);
     const maxAge = Math.max(...allAge);
+    if (minAge === maxAge) {
+        return `${minAge}`
+    }
     return `${minAge}-${maxAge}`
   }
 
