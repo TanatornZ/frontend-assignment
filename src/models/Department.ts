@@ -1,4 +1,4 @@
-import { IUserSummary, User } from "../Types/User";
+import { IUserSummary, User } from "../types/User";
 
 export class DepartmentModel {
   users: User[];

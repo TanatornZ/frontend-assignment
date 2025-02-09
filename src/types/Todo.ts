@@ -17,5 +17,7 @@ enum TodoType {
   Vegetable = "Vegetable",
 }
 
+type ITimeouts = {[key: string] : NodeJS.Timeout}
+
 export { TodoType };
-export type { ITodoItem, ITodoList, ITodoType };
+export type { ITodoItem, ITodoList, ITodoType , ITimeouts };

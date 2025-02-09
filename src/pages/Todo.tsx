@@ -1,31 +1,29 @@
 import { useState } from "react";
-import { ITodoList , ITodoItem , TodoType} from "../Types/Todo";
-import { TodoItem } from "../Components/TodoItem";
-import { TypeList } from "../Components/TypeList";
+import { ITodoList, ITodoItem, TodoType, ITimeouts } from "../types/Todo";
+import { TodoItem } from "../components/TodoItem";
+import { TypeList } from "../components/TypeList";
 import { todoData } from "../data";
 
 function TodoPage() {
   const [todoList, setTodoList] = useState(todoData);
   const [fruitList, setFruitList] = useState<ITodoList>([]);
   const [vegetableList, setVegetableList] = useState<ITodoList>([]);
-  const [timeouts, setTimeouts] = useState<{[key: string] : NodeJS.Timeout}>({}); // Store timeout IDs
-
+  const [timeoutsList, setTimeoutsList] = useState<ITimeouts>({}); // Store timeout IDs
 
   const handleOnClickFromTodoList = (todo: ITodoItem) => {
     const newTodoList = todoList.filter((item) => item !== todo);
     setTodoList(newTodoList);
 
-    let timeoutId
+    let timeoutId;
     if (todo.type === TodoType.Fruit) {
       setFruitList([...fruitList, todo]);
-      
+
       timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
         setFruitList((list) => list.filter((i) => i !== todo));
-
-        setTimeouts((prevTimeouts) => {
+        setTimeoutsList((prevTimeouts) => {
           const newTimeouts = { ...prevTimeouts };
-          delete newTimeouts[todo.name]
+          delete newTimeouts[todo.name];
           return newTimeouts;
         });
       }, 5000);
@@ -34,29 +32,28 @@ function TodoPage() {
       timeoutId = setTimeout(() => {
         setTodoList((list) => [...list, todo]);
         setVegetableList((list) => list.filter((i) => i !== todo));
-
-        setTimeouts((prevTimeouts) => {
+        setTimeoutsList((prevTimeouts) => {
           const newTimeouts = { ...prevTimeouts };
-          delete newTimeouts[todo.name]
+          delete newTimeouts[todo.name];
           return newTimeouts;
         });
       }, 5000);
     }
 
     // set time outs id
-    setTimeouts((prevTimeouts) => ({
+    setTimeoutsList((prevTimeouts) => ({
       ...prevTimeouts,
       [todo.name]: timeoutId,
     }));
   };
 
   const handleOnClickFromTypeList = (todo: ITodoItem) => {
-    const timeoutId = timeouts[todo.name];    // If a timeout exists, clear it
+    const timeoutId = timeoutsList[todo.name]; // If a timeout exists, clear it
     if (timeoutId) {
       clearTimeout(timeoutId);
 
       // Remove the timeout ID from the state
-      setTimeouts((prevTimeouts) => {
+      setTimeoutsList((prevTimeouts) => {
         const newTimeouts = { ...prevTimeouts };
         delete newTimeouts[todo.name];
         return newTimeouts;
@@ -70,6 +67,8 @@ function TodoPage() {
       setVegetableList((list) => list.filter((item) => item !== todo));
     }
   };
+
+  console.log("timeoutsList :>> ", timeoutsList);
 
   return (
     <div className="bg-indigo-50 max-w-screen min-h-screen min-w-xs">

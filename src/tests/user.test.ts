@@ -1,6 +1,6 @@
 import { expect, test} from '@jest/globals';
-const {DepartmentModel} = require('../src/models/Department')
-const {mockData} = require('../src/mockUser')
+const {DepartmentModel} = require('../../src/models/Department')
+const {mockData} = require('../../src/userForTest')
 
 test("check gender", () => {
   const user = new DepartmentModel(mockData)

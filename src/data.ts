@@ -1,4 +1,4 @@
-import { ITodoList } from "./Types/Todo";
+import { ITodoList } from "./types/Todo";
 
 export const todoData: ITodoList = [
     {

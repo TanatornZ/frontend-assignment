@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { IUserResponse, IUserSummary } from "../Types/User";
+import { IUserResponse, IUserSummary } from "../types/User";
 import { UsersModel } from "../models/User";
 import { DepartmentModel } from "../models/Department";
+import { DepartmentList } from "../components/DepartmentItem";
 
 function UserPage() {
   const [userModel, setUserModel] = useState<UsersModel>(null!);
@@ -22,10 +23,7 @@ function UserPage() {
       allDepartment.forEach((item) => {
         let user = userModel.getUserByDepartment(item);
 
-        console.log('user => ', user)
         let eachDepartment = new DepartmentModel(user, item);
-
-        console.log("user summary", eachDepartment.getSummaryUser());
 
         setSummaryUser((prev) => [
           ...(prev || []),
@@ -34,10 +32,6 @@ function UserPage() {
       });
     }
   }, [userModel]);
-
-  if (userModel) {
-    // const Engineering = new DepartmentModel(users, "Engineering");
-  }
 
   return (
     <div className="bg-indigo-50  max-w-screen  min-h-screen overflow-auto min-w-xs relative">
@@ -64,11 +58,3 @@ function UserPage() {
 }
 
 export default UserPage;
-
-const DepartmentList = (department: { department: IUserSummary }) => {
-  return (
-    <div className="p-4 bg-blue-100 rounded-xl">
-      <pre className="">{JSON.stringify(department.department, null, 2)}</pre>
-    </div>
-  );
-};
